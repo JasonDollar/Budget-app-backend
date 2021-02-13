@@ -1,9 +1,16 @@
 const express = require('express')
 
+const { createExpense } = require('../controllers/expenses')
+
 const router = express.Router()
 
-router.get('/', (req, res) => {
-  res.json({ success: true })
-})
+router
+  .route('/')
+  .get((req, res) => {
+    res.json({ success: true })
+  })
+  .post(createExpense)
+
+
 
 module.exports = router
