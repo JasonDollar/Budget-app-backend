@@ -7,9 +7,18 @@ const expenseSchema = new Schema({
     type: String,
     required: true,
   },
+  description: {
+    type: String,
+    maxlength: 180,
+  },
   amount: {
     type: Number,
     required: true,
+  },
+  createdAt: {
+    type: Date,
+    required: true,
+    default: new Date(),
   },
 })
 
