@@ -1,8 +1,16 @@
 const Expense = require('../models/Expense')
 
 exports.createExpense = async (req, res) => {
-  const { title, amount } = req.body
-  const newExpense = new Expense({ title, amount })
+  const {
+    title, amount, description, createdAt = new Date(), 
+  } = req.body
+  const expense = { 
+    title, amount, description, createdAt, 
+  }
+
+  if (!description) { delete expense.description }
+
+  const newExpense = new Expense(expense)
   await newExpense.save()
-  res.json({ expense: newExpense })
+  res.json({ success: true, data: newExpense })
 }
