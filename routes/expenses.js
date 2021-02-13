@@ -1,6 +1,6 @@
 const express = require('express')
 
-const { createExpense } = require('../controllers/expenses')
+const { createExpense, updateExpense } = require('../controllers/expenses')
 
 const router = express.Router()
 
@@ -11,6 +11,9 @@ router
   })
   .post(createExpense)
 
+router
+  .route('/:expenseId')
+  .patch(updateExpense)
 
 
 module.exports = router
