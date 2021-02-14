@@ -1,5 +1,6 @@
 const express = require('express')
 
+const auth = require('../middleware/auth')
 const { createExpense, updateExpense } = require('../controllers/expenses')
 
 const router = express.Router()
@@ -9,7 +10,7 @@ router
   .get((req, res) => {
     res.json({ success: true })
   })
-  .post(createExpense)
+  .post(auth, createExpense)
 
 router
   .route('/:expenseId')
