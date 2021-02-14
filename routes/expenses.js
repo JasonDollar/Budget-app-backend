@@ -18,5 +18,6 @@ router
   .patch(auth, updateExpense)
   .delete(auth, deleteExpense)
 
+router.route('/test').get((req, res) => res.status(200).json({ success: true }))
 
 module.exports = router
