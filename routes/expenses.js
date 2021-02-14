@@ -1,7 +1,8 @@
 const express = require('express')
 
 const auth = require('../middleware/auth')
-const { createExpense, updateExpense } = require('../controllers/expenses')
+const { createExpense, updateExpense, deleteExpense } = require('../controllers/expenses')
+
 
 const router = express.Router()
 
@@ -14,7 +15,8 @@ router
 
 router
   .route('/:expenseId')
-  .patch(updateExpense)
+  .patch(auth, updateExpense)
+  .delete(auth, deleteExpense)
 
 
 module.exports = router
