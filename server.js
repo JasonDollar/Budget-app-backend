@@ -2,6 +2,7 @@ const dotenv = require('dotenv').config({ path: '.env' })
 const express = require('express')
 const connectDB = require('./config/db')
 const expenseRoutes = require('./routes/expenses')
+const userRoutes = require('./routes/users')
 
 const app = express()
 connectDB()
@@ -10,6 +11,7 @@ const port = process.env.PORT || 3080
 app.use(express.json())
 
 app.use('/api/v1/expenses', expenseRoutes)
+app.use('/api/v1/users', userRoutes)
 
 app.get('/', (req, res) => {
   res.send('App Works !!!!')
