@@ -7,5 +7,5 @@ exports.createUser = catchAsync(async (req, res) => {
   await user.save()
   const token = await user.generateAuthToken()
 
-  res.json({ success: true, data: { user, token } })
+  res.status(201).json({ success: true, data: { user, token } })
 })

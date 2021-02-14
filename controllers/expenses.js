@@ -13,11 +13,11 @@ exports.createExpense = catchAsync(async (req, res) => {
 
   const newExpense = new Expense(expense)
   await newExpense.save()
-  res.json({ success: true, data: newExpense })
+  res.status(201).json({ success: true, data: newExpense })
 })
 
 exports.updateExpense = catchAsync(async (req, res) => {
   const updates = { ...req.body }
   const updatedExpense = await Expense.findByIdAndUpdate(req.params.expenseId, updates, { new: true })
-  res.json({ success: true, data: updatedExpense })
+  res.status(200).json({ success: true, data: updatedExpense })
 })
