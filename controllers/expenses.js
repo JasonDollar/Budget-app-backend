@@ -3,10 +3,14 @@ const catchAsync = require('../config/catchAsync')
 
 exports.createExpense = catchAsync(async (req, res) => {
   const {
-    title, amount, description, createdAt = new Date(), 
+    title, amount, description, 
   } = req.body
+  
   const expense = { 
-    title, amount, description, createdAt, 
+    title,
+    amount, 
+    description, 
+    owner: req.user._id,
   }
 
   if (!description) { delete expense.description }
