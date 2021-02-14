@@ -38,3 +38,9 @@ exports.deleteExpense = catchAsync(async (req, res) => {
 
   res.status(200).json({ success: true, data: expense })
 })
+
+exports.getUsersExpenses = catchAsync(async (req, res) => {
+  const expenses = await Expense.find({ owner: req.user._id })
+
+  res.status(200).json({ success: true, data: expenses })
+})

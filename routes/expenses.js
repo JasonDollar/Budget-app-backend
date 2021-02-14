@@ -1,16 +1,16 @@
 const express = require('express')
 
 const auth = require('../middleware/auth')
-const { createExpense, updateExpense, deleteExpense } = require('../controllers/expenses')
+const {
+  createExpense, updateExpense, deleteExpense, getUsersExpenses, 
+} = require('../controllers/expenses')
 
 
 const router = express.Router()
 
 router
   .route('/')
-  .get((req, res) => {
-    res.json({ success: true })
-  })
+  .get(auth, getUsersExpenses)
   .post(auth, createExpense)
 
 router
