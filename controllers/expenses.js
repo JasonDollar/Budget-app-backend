@@ -25,7 +25,7 @@ exports.updateExpense = catchAsync(async (req, res) => {
   const updatedExpense = await Expense.findOneAndUpdate(
     { _id: req.params.expenseId, owner: req.user._id }, 
     updates, 
-    { new: true },
+    { new: true, useFindAndModify: false },
   )
   res.status(200).json({ success: true, expense: updatedExpense })
 })
