@@ -35,9 +35,9 @@ const userSchema = new mongoose.Schema({
       required: true,
     },
   }],
-  avatar: {
-    type: Buffer,
-  },
+  // avatar: {
+  //   type: Buffer,
+  // },
 }, {
   timestamps: true,
 })
@@ -62,6 +62,16 @@ userSchema.pre('save', async function (next) {
 
   next()
 })
+
+userSchema.methods.toJSON = function () {
+  const user = this
+  const userObject = user.toObject()
+
+  delete userObject.password
+  delete userObject.tokens
+
+  return userObject
+}
 
 
 const User = mongoose.model('User', userSchema)
