@@ -20,6 +20,11 @@ const expenseSchema = new Schema({
     required: true,
     ref: 'User',
   },
+  expenseDate: {
+    type: Date,
+    required: true,
+    default: new Date(),
+  },
 }, {
   timestamps: true,
 })
