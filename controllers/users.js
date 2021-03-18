@@ -52,3 +52,10 @@ exports.loginUser = catchAsync(async (req, res) => {
 
   res.status(200).json({ success: true, userData: { user, token } })
 })
+
+exports.logoutUser = catchAsync(async (req, res) => {
+  req.user.tokens = req.user.tokens.filter(token => token.token !== req.token)
+  await req.user.save()
+
+  res.json({ success: true })
+})
