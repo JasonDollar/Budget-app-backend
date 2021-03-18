@@ -2,12 +2,17 @@ const express = require('express')
 
 const auth = require('../middleware/auth')
 
-const { createUser, getLoggedUserInfo, addCategory } = require('../controllers/users')
+const {
+  createUser, loginUser, getLoggedUserInfo, addCategory, 
+} = require('../controllers/users')
 
 const router = express.Router()
 
 router.route('/')
   .post(createUser)
+
+router.route('/login')
+  .post(loginUser)
 
 router.route('/userDetails')
   .get(auth, getLoggedUserInfo)

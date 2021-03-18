@@ -1,10 +1,13 @@
+const bcrypt = require('bcryptjs')
 const User = require('../models/User')
 const catchAsync = require('../config/catchAsync')
 
-// const { defaultCategories } = require('../config/config')
+const { defaultCategories } = require('../config/config')
 
 exports.createUser = catchAsync(async (req, res) => {
   const user = new User(req.body)
+
+  defaultCategories.forEach(item => user.categories.push(item))
 
   await user.save()
   const token = await user.generateAuthToken()
@@ -30,4 +33,22 @@ exports.addCategory = catchAsync(async (req, res) => {
   await user.save()
 
   res.status(200).json({ categories: user.categories })
+})
+
+exports.loginUser = catchAsync(async (req, res) => {
+  const user = await User.findOne({ email: req.body.email })
+
+  if (!user) {
+    return res.status(401).json({ success: false, message: 'Unable to login!' })
+  }
+
+  const isMatch = await bcrypt.compare(req.body.password, user.password)
+
+  if (!isMatch) {
+    return res.status(401).json({ success: false, message: 'Unable to login!' })
+  }
+
+  const token = await user.generateAuthToken()
+
+  res.status(200).json({ success: true, userData: { user, token } })
 })
