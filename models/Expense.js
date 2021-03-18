@@ -25,6 +25,11 @@ const expenseSchema = new Schema({
     required: true,
     default: new Date(),
   },
+  category: {
+    type: String,
+    required: true,
+    default: 'other',
+  },
 }, {
   timestamps: true,
 })

@@ -35,6 +35,11 @@ const userSchema = new mongoose.Schema({
       required: true,
     },
   }],
+  categories: [{
+    type: String,
+    trim: true,
+    lowercase: true,
+  }],
   // avatar: {
   //   type: Buffer,
   // },

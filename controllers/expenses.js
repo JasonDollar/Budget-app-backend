@@ -3,13 +3,20 @@ const catchAsync = require('../config/catchAsync')
 
 exports.createExpense = catchAsync(async (req, res) => {
   const {
-    title, amount, description, 
+    title, amount, description, category,
   } = req.body
-  
+
+  const correctCategory = req.user.categories.find(item => item === category)
+
+  if (!correctCategory) {
+    return res.status(404).json({ success: false, message: 'Chosen category is incorrect' })
+  }
+  console.log(correctCategory)
   const expense = { 
     title,
     amount, 
     description, 
+    category,
     owner: req.user._id,
   }
 

@@ -1,6 +1,8 @@
 const User = require('../models/User')
 const catchAsync = require('../config/catchAsync')
 
+// const { defaultCategories } = require('../config/config')
+
 exports.createUser = catchAsync(async (req, res) => {
   const user = new User(req.body)
 
@@ -12,4 +14,20 @@ exports.createUser = catchAsync(async (req, res) => {
 
 exports.getLoggedUserInfo = catchAsync(async (req, res) => {
   res.status(200).json({ user: req.user })
+})
+
+exports.addCategory = catchAsync(async (req, res) => {
+  const { newCategory } = req.body
+  if (!newCategory) return res.status(200).json({ success: false, message: 'Add category' })
+  const { user } = req
+
+  user.categories.push(newCategory)
+
+  // // below resets categories
+  // user.categories = []
+  // defaultCategories.forEach(item => user.categories.push(item))
+
+  await user.save()
+
+  res.status(200).json({ categories: user.categories })
 })
