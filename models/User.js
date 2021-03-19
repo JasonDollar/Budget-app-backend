@@ -40,6 +40,18 @@ const userSchema = new mongoose.Schema({
     trim: true,
     lowercase: true,
   }],
+  settings: {
+    currency: {
+      type: String,
+      required: true,
+      enum: ['USD', 'EUR', 'PLN', 'GBP'],
+      default: 'USD',
+    },
+    locale: {
+      type: String,
+      default: 'en-US',
+    },
+  },
   // avatar: {
   //   type: Buffer,
   // },
