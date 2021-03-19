@@ -3,7 +3,7 @@ const express = require('express')
 const auth = require('../middleware/auth')
 
 const {
-  createUser, loginUser, logoutUser, getLoggedUserInfo, addCategory, 
+  createUser, loginUser, logoutUser, getLoggedUserInfo, addCategory, changeCurrency,
 } = require('../controllers/users')
 
 const router = express.Router()
@@ -22,5 +22,8 @@ router.route('/userDetails')
 
 router.route('/category')
   .post(auth, addCategory)
+
+router.route('/currency')
+  .patch(auth, changeCurrency)
 
 module.exports = router

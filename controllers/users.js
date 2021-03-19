@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs')
 const User = require('../models/User')
 const catchAsync = require('../config/catchAsync')
 
-const { defaultCategories } = require('../config/config')
+const { defaultCategories, currenciesLocales } = require('../config/config')
 
 exports.createUser = catchAsync(async (req, res) => {
   const user = new User(req.body)
@@ -45,7 +45,7 @@ exports.loginUser = catchAsync(async (req, res) => {
   const isMatch = await bcrypt.compare(req.body.password, user.password)
 
   if (!isMatch) {
-    return res.status(401).json({ success: false, message: 'Unable to login!' })
+    return res.status(401).json({ success: false, message: 'Unable to login!M' })
   }
 
   const token = await user.generateAuthToken()
@@ -58,4 +58,23 @@ exports.logoutUser = catchAsync(async (req, res) => {
   await req.user.save()
 
   res.json({ success: true })
+})
+
+exports.changeCurrency = catchAsync(async (req, res) => {
+  const { newCurrency } = req.body
+  const currencyData = currenciesLocales.find(item => item.currency === newCurrency)
+  // console.log(currencyData)
+  if (!currencyData) { return res.status(404).json({ success: false, message: 'Currency unsupported' }) }
+
+  const { user } = req
+  
+  if (user.settings.currency === currencyData.currency) {
+    return res.status(200).json({ success: true, currency: currencyData, message: 'Nothing changed' })
+  }
+
+  user.settings = currencyData
+
+  await user.save()
+
+  res.status(200).json({ success: true, currency: currencyData })
 })

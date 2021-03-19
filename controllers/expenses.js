@@ -11,7 +11,7 @@ exports.createExpense = catchAsync(async (req, res) => {
   if (!correctCategory) {
     return res.status(404).json({ success: false, message: 'Chosen category is incorrect' })
   }
-  console.log(correctCategory)
+  
   const expense = { 
     title,
     amount, 
