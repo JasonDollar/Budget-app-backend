@@ -24,6 +24,9 @@ exports.addCategory = catchAsync(async (req, res) => {
   if (!newCategory) return res.status(200).json({ success: false, message: 'Add category' })
   const { user } = req
 
+  const categoryIndex = user.categories.findIndex(item => item.toLowerCase() === newCategory.toLowerCase())
+
+  if (categoryIndex >= 0) { return res.status(404).json({ success: false, message: 'Category already exist' }) }
   user.categories.push(newCategory)
 
   // // below resets categories
@@ -67,7 +70,7 @@ exports.changeCurrency = catchAsync(async (req, res) => {
   if (!currencyData) { return res.status(404).json({ success: false, message: 'Currency unsupported' }) }
 
   const { user } = req
-  
+
   if (user.settings.currency === currencyData.currency) {
     return res.status(200).json({ success: true, currency: currencyData, message: 'Nothing changed' })
   }
