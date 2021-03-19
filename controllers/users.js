@@ -38,6 +38,22 @@ exports.addCategory = catchAsync(async (req, res) => {
   res.status(200).json({ categories: user.categories })
 })
 
+exports.removeCategory = catchAsync(async (req, res) => {
+  const { category } = req.body
+
+  const { user } = req
+
+  const categoryIndex = user.categories.findIndex(item => item.toLowerCase() === category.toLowerCase())
+
+  if (categoryIndex < 0) { return res.status(404).json({ success: false, message: "Category doesn't exist" }) }
+
+  user.categories.splice(categoryIndex, 1)
+
+  await user.save()
+
+  res.status(200).json({ categories: user.categories })
+})
+
 exports.loginUser = catchAsync(async (req, res) => {
   const user = await User.findOne({ email: req.body.email })
 
