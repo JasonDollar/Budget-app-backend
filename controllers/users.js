@@ -39,8 +39,12 @@ exports.addCategory = catchAsync(async (req, res) => {
 })
 
 exports.removeCategory = catchAsync(async (req, res) => {
-  const { category } = req.body
+  const { category } = req.params
 
+  if (!category) { 
+    return res.status(404).json({ success: false, message: 'Provide category you want to remove' }) 
+  }
+  
   const { user } = req
 
   const categoryIndex = user.categories.findIndex(item => item.toLowerCase() === category.toLowerCase())

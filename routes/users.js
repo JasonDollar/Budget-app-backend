@@ -22,6 +22,7 @@ router.route('/userDetails')
 
 router.route('/category')
   .post(auth, addCategory)
+router.route('/category/:category')
   .delete(auth, removeCategory)
 
 router.route('/currency')
