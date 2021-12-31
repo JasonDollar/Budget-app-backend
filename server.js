@@ -4,6 +4,7 @@ const cors = require('cors')
 const connectDB = require('./config/db')
 const expenseRoutes = require('./routes/expenses')
 const userRoutes = require('./routes/users')
+const errorHandler = require('./controllers/error')
 
 const app = express()
 connectDB()
@@ -19,6 +20,8 @@ app.use('/api/v1/users', userRoutes)
 app.get('/', (req, res) => {
   res.send('App Works !!!!')
 })
+
+app.use(errorHandler)
 
 app.listen(port, () => {
   console.log(`Server listening on the port::${port}`)
