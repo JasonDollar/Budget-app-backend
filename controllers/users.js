@@ -12,19 +12,18 @@ exports.createUser = catchAsync(async (req, res) => {
   await user.save()
   const token = await user.generateAuthToken()
 
-  res.status(201).json({ success: true, userData: { user, token } })
+  return res.status(201).json({ success: true, userData: { user, token } })
 })
 
-exports.getLoggedUserInfo = catchAsync(async (req, res) => {
-  res.status(200).json({ user: req.user })
-})
+exports.getLoggedUserInfo = catchAsync(async (req, res) => res.status(200).json({ user: req.user }))
 
 exports.addCategory = catchAsync(async (req, res) => {
   const { newCategory } = req.body
   if (!newCategory) return res.status(200).json({ success: false, message: 'Add category' })
   const { user } = req
 
-  const categoryIndex = user.categories.findIndex(item => item.toLowerCase() === newCategory.toLowerCase())
+  const categoryIndex = user.categories
+    .findIndex(item => item.toLowerCase() === newCategory.toLowerCase())
 
   if (categoryIndex >= 0) { return res.status(404).json({ success: false, message: 'Category already exist' }) }
   user.categories.push(newCategory)
@@ -35,7 +34,7 @@ exports.addCategory = catchAsync(async (req, res) => {
 
   await user.save()
 
-  res.status(200).json({ categories: user.categories })
+  return res.status(200).json({ categories: user.categories })
 })
 
 exports.removeCategory = catchAsync(async (req, res) => {
@@ -47,7 +46,8 @@ exports.removeCategory = catchAsync(async (req, res) => {
   
   const { user } = req
 
-  const categoryIndex = user.categories.findIndex(item => item.toLowerCase() === category.toLowerCase())
+  const categoryIndex = user.categories
+    .findIndex(item => item.toLowerCase() === category.toLowerCase())
 
   if (categoryIndex < 0) { return res.status(404).json({ success: false, message: "Category doesn't exist" }) }
 
@@ -55,7 +55,7 @@ exports.removeCategory = catchAsync(async (req, res) => {
 
   await user.save()
 
-  res.status(200).json({ categories: user.categories })
+  return res.status(200).json({ categories: user.categories })
 })
 
 exports.loginUser = catchAsync(async (req, res) => {
@@ -73,20 +73,20 @@ exports.loginUser = catchAsync(async (req, res) => {
 
   const token = await user.generateAuthToken()
 
-  res.status(200).json({ success: true, userData: { user, token } })
+  return res.status(200).json({ success: true, userData: { user, token } })
 })
 
 exports.logoutUser = catchAsync(async (req, res) => {
   req.user.tokens = req.user.tokens.filter(token => token.token !== req.token)
   await req.user.save()
 
-  res.json({ success: true })
+  return res.json({ success: true })
 })
 
 exports.changeCurrency = catchAsync(async (req, res) => {
   const { newCurrency } = req.body
   const currencyData = currenciesLocales.find(item => item.currency === newCurrency)
-  // console.log(currencyData)
+
   if (!currencyData) { return res.status(404).json({ success: false, message: 'Currency unsupported' }) }
 
   const { user } = req
@@ -99,5 +99,5 @@ exports.changeCurrency = catchAsync(async (req, res) => {
 
   await user.save()
 
-  res.status(200).json({ success: true, currency: currencyData })
+  return res.status(200).json({ success: true, currency: currencyData })
 })

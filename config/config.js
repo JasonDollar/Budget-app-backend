@@ -19,7 +19,10 @@ const currenciesLocales = [
   },
 ]
 
+const supportedCurrencies = ['USD', 'EUR', 'PLN', 'GBP']
+
 module.exports = {
   defaultCategories,
   currenciesLocales,
+  supportedCurrencies,
 }

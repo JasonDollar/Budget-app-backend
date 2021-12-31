@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const { supportedCurrencies } = require('../config/config')
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -44,7 +45,7 @@ const userSchema = new mongoose.Schema({
     currency: {
       type: String,
       required: true,
-      enum: ['USD', 'EUR', 'PLN', 'GBP'],
+      enum: supportedCurrencies,
       default: 'USD',
     },
     locale: {

@@ -24,7 +24,7 @@ exports.createExpense = catchAsync(async (req, res) => {
 
   const newExpense = new Expense(expense)
   await newExpense.save()
-  res.status(201).json({ success: true, expense: newExpense })
+  return res.status(201).json({ success: true, expense: newExpense })
 })
 
 exports.updateExpense = catchAsync(async (req, res) => {
@@ -43,11 +43,11 @@ exports.deleteExpense = catchAsync(async (req, res) => {
     return res.status(404).json({ success: false, message: 'Did not find such expense' })
   }
 
-  res.status(200).json({ success: true, expense })
+  return res.status(200).json({ success: true, expense })
 })
 
 exports.getUsersExpenses = catchAsync(async (req, res) => {
   const expenses = await Expense.find({ owner: req.user._id })
 
-  res.status(200).json({ success: true, expenses })
+  return res.status(200).json({ success: true, expenses })
 })
