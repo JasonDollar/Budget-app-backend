@@ -6,7 +6,7 @@ exports.createExpense = catchAsync(async (req, res) => {
     title, amount, description, category,
   } = req.body
 
-  const correctCategory = req.user.categories.find(item => item === category)
+  const correctCategory = req.user.categories.find(item => item.categoryName === category)
 
   if (!correctCategory) {
     return res.status(404).json({ success: false, message: 'Chosen category is incorrect' })

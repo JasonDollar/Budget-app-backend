@@ -68,6 +68,10 @@ const userSchema = new mongoose.Schema({
       default: 'en-US',
     },
   },
+  role: {
+    type: String,
+    default: 'user',
+  },
   // avatar: {
   //   type: Buffer,
   // },
@@ -102,6 +106,7 @@ userSchema.methods.toJSON = function () {
 
   delete userObject.password
   delete userObject.tokens
+  delete userObject.role
 
   return userObject
 }
