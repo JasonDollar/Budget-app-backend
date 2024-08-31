@@ -4,6 +4,7 @@ const auth = require('../middleware/auth')
 
 const {
   createUser, loginUser, logoutUser, getLoggedUserInfo, addCategory, removeCategory, changeCurrency,
+  updateCategory,
 } = require('../controllers/users')
 
 const router = express.Router()
@@ -22,7 +23,8 @@ router.route('/userDetails')
 
 router.route('/category')
   .post(auth, addCategory)
-router.route('/category/:category')
+router.route('/category/:categoryId')
+  .patch(auth, updateCategory)
   .delete(auth, removeCategory)
 
 router.route('/currency')

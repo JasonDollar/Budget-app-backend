@@ -1,4 +1,12 @@
-const defaultCategories = ['home', 'health', 'food', 'leisure', 'shop', 'restaurant', 'clothing', 'transport', 'gift', 'other']
+const { randomNumber } = require('../lib/utils')
+
+const defaultCategoriesString = ['home', 'health', 'food', 'leisure', 'shop', 'restaurant', 'clothing', 'transport', 'gift', 'other']
+
+const defaultCategories = () => defaultCategoriesString.map(item => ({
+  categoryName: item,
+  categoryColor: `#${randomNumber(255, 10).toString(16)}${randomNumber(255, 10).toString(16)}${randomNumber(255, 10).toString(16)}`,
+  categoryIcon: '',
+}))
 
 const currenciesLocales = [
   {

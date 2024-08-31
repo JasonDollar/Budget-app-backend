@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { supportedCurrencies } = require('../config/config')
+const { isHexColor } = require('../lib/utils')
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -37,9 +38,23 @@ const userSchema = new mongoose.Schema({
     },
   }],
   categories: [{
-    type: String,
-    trim: true,
-    lowercase: true,
+    categoryName: {
+      type: String,
+      required: [true, 'Category name is required'],
+      trim: true,
+      lowercase: true,
+      maxlength: [180, 'Please, use shorter category name'],
+    },
+    categoryColor: {
+      type: String,
+      trim: true,
+      validate(value) {
+        if (!isHexColor(value)) {
+          throw new Error('Please, provide valid hex color for a category color')
+        }
+      },
+    },
+    categoryIcon: String,
   }],
   settings: {
     currency: {

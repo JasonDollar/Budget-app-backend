@@ -7,7 +7,7 @@ const { defaultCategories, currenciesLocales } = require('../config/config')
 exports.createUser = catchAsync(async (req, res) => {
   const user = new User(req.body)
 
-  defaultCategories.forEach(item => user.categories.push(item))
+  defaultCategories().forEach(item => user.categories.push(item))
 
   await user.save()
   const token = await user.generateAuthToken()
@@ -37,25 +37,44 @@ exports.addCategory = catchAsync(async (req, res) => {
   return res.status(200).json({ categories: user.categories })
 })
 
-exports.removeCategory = catchAsync(async (req, res) => {
-  const { category } = req.params
+exports.updateCategory = catchAsync(async (req, res) => {
+  const { categoryId } = req.params
+  const { user } = req
 
-  if (!category) { 
+  const updatedCategories = user.categories
+    .map(item => {
+      if (item._id.equals(categoryId)) {
+        return {
+          ...item.toObject(),
+          ...req.body,
+        }
+      } 
+      return item
+    })
+
+  user.categories = updatedCategories
+
+  await user.save()
+
+  return res.status(200).json({ categories: updatedCategories })
+})
+
+exports.removeCategory = catchAsync(async (req, res) => {
+  const { categoryId } = req.params
+
+  if (!categoryId) { 
     return res.status(404).json({ success: false, message: 'Provide category you want to remove' }) 
   }
   
   const { user } = req
+  const filteredCategories = user.categories
+    .filter(item => !item._id.equals(categoryId))
 
-  const categoryIndex = user.categories
-    .findIndex(item => item.toLowerCase() === category.toLowerCase())
-
-  if (categoryIndex < 0) { return res.status(404).json({ success: false, message: "Category doesn't exist" }) }
-
-  user.categories.splice(categoryIndex, 1)
+  user.categories = filteredCategories
 
   await user.save()
 
-  return res.status(200).json({ categories: user.categories })
+  return res.status(200).json({ categories: filteredCategories })
 })
 
 exports.loginUser = catchAsync(async (req, res) => {
