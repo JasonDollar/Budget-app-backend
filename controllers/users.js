@@ -18,14 +18,22 @@ exports.createUser = catchAsync(async (req, res) => {
 exports.getLoggedUserInfo = catchAsync(async (req, res) => res.status(200).json({ user: req.user }))
 
 exports.addCategory = catchAsync(async (req, res) => {
-  const { newCategory } = req.body
-  if (!newCategory) return res.status(200).json({ success: false, message: 'Add category' })
   const { user } = req
+  const { categoryName, categoryColor, categoryIcon } = req.body
+  const newCategory = {
+    categoryName: 'default', categoryColor: '#aaaaaa', categoryIcon: 'default',
+  }
+  
 
   const categoryIndex = user.categories
-    .findIndex(item => item.toLowerCase() === newCategory.toLowerCase())
+    .findIndex(item => item.categoryName === categoryName.toLowerCase())
 
   if (categoryIndex >= 0) { return res.status(404).json({ success: false, message: 'Category already exist' }) }
+
+  if (categoryName) newCategory.categoryName = categoryName
+  if (categoryColor) newCategory.categoryColor = categoryColor
+  if (categoryIcon) newCategory.categoryIcon = categoryIcon
+
   user.categories.push(newCategory)
 
   // // below resets categories
