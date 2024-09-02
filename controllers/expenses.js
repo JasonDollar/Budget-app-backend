@@ -51,3 +51,40 @@ exports.getUsersExpenses = catchAsync(async (req, res) => {
 
   return res.status(200).json({ success: true, expenses })
 })
+
+exports.getUserExpensesGrouped = catchAsync(async (req, res) => {
+  const expenses = await Expense
+    .aggregate([
+      {
+        $match: {
+          owner: req.user._id,
+        },
+      },
+      {
+        $group: {
+          // _id: null,
+          _id: {
+            // $first: {
+            $concat: [
+              { $toString: { $year: '$expenseDate' } },
+              { $toString: { $cond: { if: { $lt: [{ $month: '$expenseDate' }, 10] }, then: '0', else: '' } } }, // Add zero in front of one digit month
+              { $toString: { $month: '$expenseDate' } },
+            ],
+            // }, 
+          }, 
+          expenses: { $push: '$$ROOT' },
+            
+          totalExpensesQty: { $sum: '$amount' },
+  
+          totalExpensesCount: { $sum: 1 },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
+    ])
+  
+  return res.status(200).json({ success: true, expenses })
+})
